@@ -22,4 +22,13 @@ class CreatePostsTest extends FeaturesTestCase
 
         $this->see($title);
     }
+
+    public function test_a_user_create_a_post_requires_authentication()
+    {
+        //when
+        $this->visit(route('posts.create'));
+
+        //them
+        $this->seePageIs(route('login'));
+    }
 }
