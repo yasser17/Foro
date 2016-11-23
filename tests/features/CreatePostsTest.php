@@ -2,7 +2,7 @@
 
 class CreatePostsTest extends FeaturesTestCase
 {
-    public function test_a_user_create_a_post()
+    function test_a_user_create_a_post()
     {
         $title = 'Esta es una pregunta';
         $content = 'Este es el contenido';
@@ -23,12 +23,20 @@ class CreatePostsTest extends FeaturesTestCase
         $this->see($title);
     }
 
-    public function test_a_user_create_a_post_requires_authentication()
+    function test_a_user_create_a_post_requires_authentication()
     {
         //when
-        $this->visit(route('posts.create'));
+        $this->visit(route('posts.create'))
+            ->seePageIs(route('login'));
+    }
 
-        //them
-        $this->seePageIs(route('login'));
+    function test_created_post_form_validation()
+    {
+        $this->actingAs($this->defaultUser())
+            ->visit(route('posts.create'))
+            ->press('Publicar')
+            ->seePageIs(route('posts.create'))
+            ->seeInElement('#field_title .help-block', 'El campo título es obligatorio')
+            ->seeInElement('#field_content .help-block', 'El campo contenido es obligatorio');
     }
 }
