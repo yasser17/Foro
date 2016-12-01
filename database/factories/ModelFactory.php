@@ -27,3 +27,4 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
         'pending' => $faker->boolean
     ];
 });
+
