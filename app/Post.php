@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -16,5 +17,12 @@ class Post extends Model
     public function getUrlAttribute()
     {
         return route('posts.show', [$this->id, $this->slug]);
+    }
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = $value;
+
+        $this->attributes['slug'] = Str::slug($value);
     }
 }
