@@ -1,5 +1,6 @@
 <?php
 
+use App\Post;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -17,5 +18,25 @@ class PostListTest extends FeaturesTestCase
             ->see($post->title)
             ->click($post->title)
             ->seePageIs($post->url);
+    }
+
+    function test_posts_are_paginated()
+    {
+        $first = factory(Post::class)->create([
+            'title' => 'Primer post'
+        ]);
+
+        factory(Post::class)->times(15)->create();
+
+        $last = factory(Post::class)->create([
+            'title' => 'El ultimo post'
+        ]);
+
+        $this->visit('/')
+            ->see($first->title)
+            ->dontSee($last->title)
+            ->click('2')
+            ->see($last->title)
+            ->dontSee($first->title);
     }
 }
