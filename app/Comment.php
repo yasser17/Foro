@@ -24,6 +24,8 @@ class Comment extends Model
 
     public function markAsAnswer()
     {
+        $this->post->comments()->where('answer', true)->update(['answer' => false]);
+
         $this->answer = true;
 
         $this->save();

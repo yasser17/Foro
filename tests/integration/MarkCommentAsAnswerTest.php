@@ -21,4 +21,20 @@ class MarkCommentAsAnswerTest extends TestCase
 
         $this->assertFalse($post->fresh()->pending);
     }
+
+    function test_a_post_can_only_one_answer()
+    {
+        $post = $this->createPost();
+
+        $comments = factory(Comment::class)->times(2)->create([
+            'post_id' => $post->id
+        ]);
+
+        $comments->first()->markAsAnswer();
+        $comments->last()->markAsAnswer();
+
+        $this->assertFalse($comments->first()->fresh()->answer);
+        $this->assertTrue($comments->last()->fresh()->answer);
+
+    }
 }
