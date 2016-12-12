@@ -26,7 +26,7 @@ $factory->define(Post::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence,
         'content' => $faker->paragraph,
-        'pending' => false,
+        'pending' => true,
         'user_id' => function () { //con esta function solamente se va crear el usuario cuando no se pase un usuario
             return factory(User::class)->create()->id;
         }
