@@ -23,6 +23,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function lastestComments()
+    {
+        return $this->comments()->orderBy('created_at', 'desc');
+    }
+
     public function getUrlAttribute()
     {
         return route('posts.show', [$this->id, $this->slug]);
