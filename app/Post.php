@@ -29,6 +29,11 @@ class Post extends Model
         return $this->comments()->orderBy('created_at', 'desc');
     }
 
+    public function subscriptions()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions');
+    }
+
     public function getUrlAttribute()
     {
         return route('posts.show', [$this->id, $this->slug]);
