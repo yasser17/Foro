@@ -59,6 +59,11 @@ class User extends Authenticatable
         $this->subscriptions()->attach($post);
     }
 
+    public function unsubscribeFrom(Post $post)
+    {
+        $this->subscriptions()->detach($post);
+    }
+
     public function subscriptions()
     {
         return $this->belongsToMany(Post::class, 'subscriptions');
@@ -67,5 +72,16 @@ class User extends Authenticatable
     public function owns(Model $model)
     {
         return $this->id === $model->user_id;
+    }
+
+    public function createPost(array $data)
+    {
+        $post = new Post($data);
+
+        $this->posts()->save($post);
+
+        $this->subscribeTo($post);
+
+        return $post;
     }
 }
