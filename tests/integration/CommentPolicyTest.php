@@ -1,6 +1,7 @@
 <?php
 
-use App\{Comment, User};
+use App\Comment;
+use App\User;
 use App\Policies\CommentPolicy;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
