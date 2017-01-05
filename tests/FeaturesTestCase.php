@@ -4,7 +4,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FeaturesTestCase extends TestCase
 {
-    //prueba
 	use DatabaseTransactions;
 
 	public function seeErrors(array $fields)

@@ -11,7 +11,9 @@
 |
 */
 
-use App\{Post, User, Comment};
+use App\Post;
+use App\User;
+use App\Comment;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
     return [
