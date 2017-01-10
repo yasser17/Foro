@@ -29,7 +29,7 @@ class Post extends Model
         return $this->comments()->orderBy('created_at', 'desc');
     }
 
-    public function subscriptions()
+    public function subscribers()
     {
         return $this->belongsToMany(User::class, 'subscriptions');
     }
