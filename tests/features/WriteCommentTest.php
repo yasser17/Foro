@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Notification;
 
 class WriteCommentTest extends FeaturesTestCase
 {
     function test_a_user_can_write_a_comment()
     {
+        Notification::fake();
+
         $user = $this->defaultUser();
         $commentary = 'Un comentario';
         $post = $this->createPost();
