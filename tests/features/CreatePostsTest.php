@@ -2,44 +2,50 @@
 
 use App\Post;
 
-class CreatePostsTest extends FeaturesTestCase
+class CreatePostsTest extends FeatureTestCase
 {
-    function test_a_user_create_a_post()
+    public function test_a_user_create_a_post()
     {
+        // Having
         $title = 'Esta es una pregunta';
         $content = 'Este es el contenido';
 
-        $this->actingAs($user = $this->defaultUser())
-        ->visit(route('posts.create'))
-        ->type($title, 'title')
-        ->type($content, 'content')
-        ->press('Publicar');
+        $this->actingAs($user = $this->defaultUser());
 
+        // When
+        $this->visit(route('posts.create'))
+            ->type($title, 'title')
+            ->type($content, 'content')
+            ->press('Publicar');
+
+        // Then
         $this->seeInDatabase('posts', [
             'title' => $title,
             'content' => $content,
             'pending' => true,
             'user_id' => $user->id,
+            'slug' => 'esta-es-una-pregunta',
         ]);
 
         $post = Post::first();
 
+        // Test the author is suscribed automatically to the post.
         $this->seeInDatabase('subscriptions', [
             'user_id' => $user->id,
-            'post_id' => $post->id
+            'post_id' => $post->id,
         ]);
 
+        // Test a user is redirected to the posts details after creating it.
         $this->seePageIs($post->url);
     }
 
-    function test_a_user_create_a_post_requires_authentication()
+    function test_creating_a_post_requires_authentication()
     {
-        //when
         $this->visit(route('posts.create'))
             ->seePageIs(route('login'));
     }
 
-    function test_created_post_form_validation()
+    function test_create_post_form_validation()
     {
         $this->actingAs($this->defaultUser())
             ->visit(route('posts.create'))

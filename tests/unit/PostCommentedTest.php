@@ -1,8 +1,7 @@
 <?php
 
-use App\Comment;
+use App\{User, Post, Comment};
 use App\Notifications\PostCommented;
-use App\User;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class PostCommentedTest extends TestCase
@@ -10,17 +9,18 @@ class PostCommentedTest extends TestCase
     /**
      * @test
      */
-    function it_builds_a_email_message()
+    function it_builds_a_mail_message()
     {
-        $post = factory(\App\Post::class)->create([
+        $post = new Post([
             'title' => 'Titulo del post'
         ]);
 
         $author = new User([
-            'name' => 'Yasser Mussa'
+            'first_name' => 'Duilio',
+            'last_name' => 'Palacios',
         ]);
 
-        $comment = new Comment();
+        $comment = new Comment;
         $comment->post = $post;
         $comment->user = $author;
 
@@ -38,7 +38,7 @@ class PostCommentedTest extends TestCase
         );
 
         $this->assertSame(
-            'Yasser Mussa escribió un comentario en: Titulo del post',
+            'Duilio Palacios escribió un comentario en: Titulo del post',
             $message->introLines[0]
         );
 

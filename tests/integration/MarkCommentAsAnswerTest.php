@@ -7,7 +7,7 @@ class MarkCommentAsAnswerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_a_post_can_be_answer()
+    function test_a_post_can_be_answered()
     {
         $post = $this->createPost();
 
@@ -22,7 +22,7 @@ class MarkCommentAsAnswerTest extends TestCase
         $this->assertFalse($post->fresh()->pending);
     }
 
-    function test_a_post_can_only_one_answer()
+    function test_a_post_can_only_have_one_answer()
     {
         $post = $this->createPost();
 
@@ -31,10 +31,11 @@ class MarkCommentAsAnswerTest extends TestCase
         ]);
 
         $comments->first()->markAsAnswer();
+
         $comments->last()->markAsAnswer();
 
         $this->assertFalse($comments->first()->fresh()->answer);
-        $this->assertTrue($comments->last()->fresh()->answer);
 
+        $this->assertTrue($comments->last()->fresh()->answer);
     }
 }

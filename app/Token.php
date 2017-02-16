@@ -17,7 +17,7 @@ class Token extends Model
 
     public static function generateFor(User $user)
     {
-        $token = new Token();
+        $token = new static;
 
         $token->token = str_random(60);
 

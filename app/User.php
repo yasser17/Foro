@@ -5,8 +5,8 @@ namespace App;
 use App\Notifications\PostCommented;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'username', 'first_name', 'last_name'
+        'email', 'username', 'first_name', 'last_name',
     ];
 
     /**
@@ -40,17 +40,36 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Post::class, 'subscriptions');
+    }
+
+    public function createPost(array $data)
+    {
+        $post = new Post($data);
+
+        $this->posts()->save($post);
+
+        $this->subscribeTo($post);
+
+        return $post;
+    }
+
     public function comment(Post $post, $message)
     {
         $comment = new Comment([
             'comment' => $message,
-            'post_id' => $post->id
+            'post_id' => $post->id,
         ]);
+
         $this->comments()->save($comment);
 
+        // Notify subscribers
         Notification::send(
             $post->subscribers()->where('users.id', '!=', $this->id)->get(),
-            new PostCommented($comment));
+            new PostCommented($comment)
+        );
 
         return $comment;
     }
@@ -70,24 +89,13 @@ class User extends Authenticatable
         $this->subscriptions()->detach($post);
     }
 
-    public function subscriptions()
-    {
-        return $this->belongsToMany(Post::class, 'subscriptions');
-    }
-
     public function owns(Model $model)
     {
         return $this->id === $model->user_id;
     }
 
-    public function createPost(array $data)
+    public function getNameAttribute()
     {
-        $post = new Post($data);
-
-        $this->posts()->save($post);
-
-        $this->subscribeTo($post);
-
-        return $post;
+        return "{$this->first_name} {$this->last_name}";
     }
 }

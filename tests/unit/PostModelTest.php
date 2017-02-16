@@ -1,23 +1,21 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Post;
 
 class PostModelTest extends TestCase
 {
     function test_adding_a_title_generates_a_slug()
     {
-        $post = new \App\Post([
+        $post = new Post([
             'title' => 'Como instalar Laravel'
         ]);
 
         $this->assertSame('como-instalar-laravel', $post->slug);
     }
 
-    function test_editing_a_title_generates_a_slug()
+    function test_editing_the_title_changes_the_slug()
     {
-        $post = new \App\Post([
+        $post = new Post([
             'title' => 'Como instalar Laravel'
         ]);
 

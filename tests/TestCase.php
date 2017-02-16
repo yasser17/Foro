@@ -1,16 +1,20 @@
 <?php
 
+use App\User;
+
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
-
-    public $defaultUser;
-
     /**
      * The base URL to use while testing the application.
      *
      * @var string
      */
     protected $baseUrl = 'http://localhost';
+
+    /**
+     * @var \App\User
+     */
+    protected $defaultUser;
 
     /**
      * Creates the application.
@@ -26,20 +30,16 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
-
-    /**
-     * @return \App\User
-     */
-    public function defaultUser()
+    public function defaultUser(array $attributes = [])
     {
         if ($this->defaultUser) {
             return $this->defaultUser;
         }
 
-        return $this->defaultUser = factory(\App\User::class)->create();
+        return $this->defaultUser = factory(User::class)->create($attributes);
     }
 
-    public function createPost(array $attributes = [])
+    protected function createPost(array $attributes = [])
     {
         return factory(\App\Post::class)->create($attributes);
     }

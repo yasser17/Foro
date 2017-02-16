@@ -2,9 +2,9 @@
 
 namespace App;
 
-use GrahamCampbell\Markdown\Facades\Markdown;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use GrahamCampbell\Markdown\Facades\Markdown;
 
 class Post extends Model
 {
@@ -24,19 +24,14 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function lastestComments()
-    {
-        return $this->comments()->orderBy('created_at', 'desc');
-    }
-
     public function subscribers()
     {
         return $this->belongsToMany(User::class, 'subscriptions');
     }
 
-    public function getUrlAttribute()
+    public function latestComments()
     {
-        return route('posts.show', [$this->id, $this->slug]);
+        return $this->comments()->orderBy('created_at', 'DESC');
     }
 
     public function setTitleAttribute($value)
@@ -44,6 +39,11 @@ class Post extends Model
         $this->attributes['title'] = $value;
 
         $this->attributes['slug'] = Str::slug($value);
+    }
+
+    public function getUrlAttribute()
+    {
+        return route('posts.show', [$this->id, $this->slug]);
     }
 
     public function getSafeHtmlContentAttribute()

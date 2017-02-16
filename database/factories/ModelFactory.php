@@ -11,40 +11,35 @@
 |
 */
 
-use App\Post;
-use App\User;
-use App\Comment;
-
-$factory->define(User::class, function (Faker\Generator $faker) {
+$factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'username' => $faker->userName,
-        'email' => $faker->unique()->safeEmail,
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
+        'username' => $faker->unique()->userName,
+        'email' => $faker->unique()->safeEmail,
         'remember_token' => str_random(10),
     ];
 });
 
-$factory->define(Post::class, function (Faker\Generator $faker) {
+$factory->define(App\Post::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence,
         'content' => $faker->paragraph,
         'pending' => true,
-        'user_id' => function () { //con esta function solamente se va crear el usuario cuando no se pase un usuario
-            return factory(User::class)->create()->id;
-        }
+        'user_id' => function () {
+            return factory(\App\User::class)->create()->id;
+        },
     ];
 });
 
-$factory->define(Comment::class, function(\Faker\Generator $faker) {
-   return [
+$factory->define(App\Comment::class, function (Faker\Generator $faker) {
+    return [
         'comment' => $faker->paragraph,
         'post_id' => function () {
-            return factory(Post::class)->create()->id;
+            return factory(\App\Post::class)->create()->id;
         },
-       'user_id' => function () {
-           return factory(User::class)->create()->id;
-       }
-   ];
+        'user_id' => function () {
+            return factory(\App\User::class)->create()->id;
+        },
+    ];
 });
-

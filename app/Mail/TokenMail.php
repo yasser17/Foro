@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class TokenMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     /**
      * @var Token
      */
