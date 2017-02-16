@@ -17,9 +17,10 @@ use App\Comment;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
+        'username' => $faker->userName,
         'email' => $faker->unique()->safeEmail,
-        'password' => bcrypt('secret'),
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
         'remember_token' => str_random(10),
     ];
 });
