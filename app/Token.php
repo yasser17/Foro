@@ -5,6 +5,7 @@ namespace App;
 use App\Mail\TokenMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class Token extends Model
 {

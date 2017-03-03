@@ -20,4 +20,22 @@ class AuthenticationTest extends FeatureTestCase
 
         $this->seePageIs('/');
     }
+
+    function test_a_user_cannot_login_with_an_invalid_token()
+    {
+        //have
+        $user = $this->defaultUser();
+        $token = Token::generateFor($user);
+        $invalid_token = str_random(60);
+        //when
+        $this->visit("login/{$invalid_token}");
+
+        $this->dontSeeIsAuthenticated()
+            ->seeRouteIs('token')
+            ->see('Este enlace ya expiró, por favor solicite otro');
+
+        $this->seeInDatabase('tokens', [
+            'id' => $token->id
+        ]);
+    }
 }
